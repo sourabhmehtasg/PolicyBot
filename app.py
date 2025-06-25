@@ -7,13 +7,19 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.text_splitter import CharacterTextSplitter
+from langchain_ollama import OllamaLLM
+from langchain_ollama import OllamaEmbeddings
+
+import os
+
+os.environ['USER_AGENT'] = 'myagent'
 
 err_str = "Unfortunately, I was not able to answer your question, because of the following error:"
 
 # -- App data loading
 # URL processing
 def process_input(urls, question):
-    model_local = Ollama(model="mistral")
+    model_local = OllamaLLM(model="mistral")
     
     # Convert string of URLs to list
     urls_list = urls.split("\n")
@@ -26,7 +32,7 @@ def process_input(urls, question):
     doc_splits = text_splitter.split_documents(docs_list)
     
     #convert text chunks into embeddings and store in vector database
-    embedding=embeddings.OllamaEmbeddings(model='nomic-embed-text')
+    embedding=OllamaEmbeddings(model='nomic-embed-text')
 
     vectorstore = Chroma.from_documents(documents=doc_splits, collection_name="rag-chroma", embedding=embedding)
     retriever = vectorstore.as_retriever()
@@ -38,7 +44,7 @@ def process_input(urls, question):
     Question: {question}
     """
 
-    model_local = Ollama(model="mistral")
+    model_local = OllamaLLM(model="mistral")
 
     after_rag_prompt = ChatPromptTemplate.from_template(after_rag_template)
 
@@ -54,7 +60,7 @@ def process_input(urls, question):
 st.set_page_config(
     page_title="Policy Bot",
     page_icon="🧊",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
 
@@ -120,11 +126,11 @@ if prompt := st.chat_input("Please select topic & ask anything about that"):
     else:
         try:
             if policy_number == ':rainbow[Policy-1]':
-                response = process_input(urls, question)
+                response = process_input("https://sourabhmehtasg.github.io/PolicyBot/Policy_1", prompt)
             elif policy_number == ':rainbow[Policy-2]':
-                response = process_input(urls, question)
+                response = process_input("https://sourabhmehtasg.github.io/PolicyBot/Policy_2", prompt)
             elif policy_number == ':rainbow[Policy-3]':
-                response = process_input(urls, question)
+                response = process_input("https://sourabhmehtasg.github.io/PolicyBot/Policy_3", prompt)
             else:
                 response = "Please select atleast one policy from sidebar to proceed further"
         except Exception as ex:
