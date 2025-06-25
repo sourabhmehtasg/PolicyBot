@@ -64,3 +64,8 @@ A LLM powered chatbot app which answers question pertaining to the uploaded poli
    - This make the input to the RAG model (mistral, llama etc) consistent. As it is found that in shared policy documents the markdow format is not consistent for heading and subheading. In large corpus it will be heavy processing to clean up the markdown special characters. Also this way ensure even if the plicy document is not markdown adn simple text file then that also can be hosted as github pages and loaded into RAG application by passing it as URL.
    - Few screenshots are attached to explain the POC application functioning. (policy_bot_1.png, policy_bot_2.png)
 
+![Preview](https://github.com/sourabhmehtasg/PolicyBot/blob/master/policy_bot_1.png)
+
+---
+
+![Preview](https://github.com/sourabhmehtasg/PolicyBot/blob/master/policy_bot_2.png)
